@@ -1,11 +1,24 @@
 # Documentation
 
 Documentation for microservices contained in the organisation.
+### Ingress
+
 
 To congfigure ingress:
 
+In repository kube-repo:
+
 ```bash
-kubectl apply -f ingress.yaml 
+cd ingress
+```
+```bash
+helm upgrade ingress-nginx ingress-nginx/ingress-nginx \
+  --create-namespace \
+  --namespace $NAMESPACE \
+  --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz
+```
+```bash
+kubectl apply -f ingress.yaml --namespace ingress-basic 
 ```
 
 To connect to AKS to resource group **rsoGroup**, to cluster **rsoCluster**, use:
@@ -245,20 +258,3 @@ kubectl apply -f product-service-mongo.yaml
 
 Make sure to select the right tag for the image to be used.
 
-
-### Ingress
-
-In repository kube-repo:
-
-```bash
-cd ingress
-```
-```bash
-helm upgrade ingress-nginx ingress-nginx/ingress-nginx \
-  --create-namespace \
-  --namespace $NAMESPACE \
-  --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz
-```
-```bash
-kubectl apply -f ingress.yaml --namespace ingress-basic 
-```
